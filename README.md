@@ -2,7 +2,7 @@
 
 Single-page site for **Made Possible**, a 3D printing maker business on the Waterside, New Forest, Hampshire. Founder: Leanne. Built as an **information and communication tool, not a sales channel**.
 
-Everything lives in `index.html` (embedded CSS + JS, no build step, no dependencies beyond Google Fonts).
+Three files: `index.html` (markup), `style.css` (all styling), `script.js` (all behaviour). No build step, no dependencies beyond Google Fonts.
 
 ## Brand quick reference
 
@@ -32,6 +32,7 @@ These were deliberate corrections; keep them intact when editing copy:
 - [ ] **Public contact email**: the form currently posts to a private Formspree destination that is *not* shown anywhere on the page. Once a proper business email exists, consider adding it back to the "Find us in person" contact block and switching the Formspree destination over.
 - [ ] **Confirm with Leanne**: the materials box invites customers to return end-of-life pieces "back into the loop" — confirm she's happy to honour returns, or cut that sentence.
 - [ ] **Blog (later)**: footer teases "a journal of new pieces and market dates". When added, keep the single-page structure and link out, or convert to a small static site generator.
+
 ## Gallery — fully dynamic, edit by adding/removing files only
 
 The "Designs" gallery does **not** have any hardcoded `<img>` tags in `index.html` anymore. On page load, a script
