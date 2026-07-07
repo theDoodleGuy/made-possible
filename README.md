@@ -32,14 +32,28 @@ These were deliberate corrections; keep them intact when editing copy:
 - [ ] **Public contact email**: the form currently posts to a private Formspree destination that is *not* shown anywhere on the page. Once a proper business email exists, consider adding it back to the "Find us in person" contact block and switching the Formspree destination over.
 - [ ] **Confirm with Leanne**: the materials box invites customers to return end-of-life pieces "back into the loop" — confirm she's happy to honour returns, or cut that sentence.
 - [ ] **Blog (later)**: footer teases "a journal of new pieces and market dates". When added, keep the single-page structure and link out, or convert to a small static site generator.
-- [ ] **Formspree activation**: the very first form submission after deploy triggers a one-time confirmation email to the Formspree destination address — it must be clicked before messages start delivering.
-- [ ] **Review gallery `alt` text**: descriptions were inferred from photo filenames (e.g. `foexes.jpg` → "fox figurines"), not written by Leanne — worth a pass to confirm accuracy and add any product-specific detail.
+## Gallery — fully dynamic, edit by adding/removing files only
+
+The "Designs" gallery does **not** have any hardcoded `<img>` tags in `index.html` anymore. On page load, a script
+fetches the current file listing of the `images/` folder from the GitHub API and builds the gallery from whatever
+is there — so to add or remove a photo, just add or delete the file in `images/` (e.g. via the GitHub web UI) and
+the site picks it up automatically, no HTML edits required.
+
+Notes on how this works:
+- `alt` text is auto-generated from the filename (`SeaChessSetPieces.jpg` → "Sea Chess Set Pieces — 3D-printed by
+  Made Possible") — not hand-written, so keep filenames reasonably descriptive.
+- Results are cached in the visitor's browser (`localStorage`) for an hour, so most page loads don't hit the API at
+  all — this keeps things fast and avoids GitHub's unauthenticated API rate limit (60 requests/hour per visitor IP).
+- If the API call fails and there's no cache yet, the gallery shows "New pieces coming soon" rather than breaking.
+- **Image size matters**: photos straight from a phone camera can be 2000px+ and several hundred KB each — resize
+  to ~1000–1400px on the longest side before adding them (`sips -Z 1000 --setProperty formatOptions low file.jpg`
+  on macOS), or the gallery will load slowly. The current 11 photos are ~50KB average after this treatment.
 
 ## Done
 
-- [x] **Photos**: gallery wired up with 13 real photos from `images/` as `<img>` tags with descriptive `alt` text (masonry desktop / swipe carousel mobile, both automatic).
-- [x] **Contact form wired**: submits via `fetch` to Formspree (no page reload), with a honeypot field and real inline success/error messaging.
-- [x] **Favicon + social meta**: `favicon.svg` added; `og:title`, `og:description`, `og:image`, and Twitter card meta added, pointing at the GitHub Pages URL.
+- [x] **Photos**: gallery now dynamic (see above), backed by real photos in `images/`.
+- [x] **Contact form wired**: submits via `fetch` to a real Formspree endpoint (no page reload), with a honeypot field and real inline success/error messaging.
+- [x] **Favicon + social meta**: `favicon.svg` added; `og:title`, `og:description`, `og:image`, and Twitter card meta added, pointing at the live domain.
 
 ## Layout notes
 

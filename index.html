@@ -319,6 +319,10 @@
   }
   .gallery-item img{ display: block; width: 100%; height: auto; border-radius: var(--radius); }
   .gallery-hint{ display: none; }
+  #gallery-empty{
+    text-align: center; font-family: var(--font-accent); font-style: italic;
+    color: var(--driftwood); font-size: 1.05rem; margin-top: 1em;
+  }
   @media (max-width: 900px){ .gallery{ column-count: 2; } }
 
   /* Phones / small widths: horizontal swipeable carousel with scroll-snap */
@@ -561,26 +565,12 @@
         <p>A range of Leanne's own designs, ready to take home or find at a local market. Got something particular in mind? Leanne does consider commissions — <a href="#contact">get in touch</a>.</p>
       </div>
 
-      <!-- Gallery: add or remove .gallery-item blocks freely — the layout flows automatically. -->
-      <div class="gallery">
-
-        <div class="gallery-item"><img src="images/boatPic.jpg" width="1400" height="1386" alt="3D-printed model boat, inspired by the Waterside coastline" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/anchorKeychain.jpg" width="1050" height="1400" alt="Anchor-shaped keychain, 3D-printed in plant-based filament" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/SeaChessSetPieces.jpg" width="1400" height="1050" alt="Sea-themed chess set pieces" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/seapics.jpg" width="1400" height="1050" alt="3D-printed sea-inspired pieces" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/wingullHanging.jpg" width="1400" height="1050" alt="3D-printed Wingull hanging ornament" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/foexes.jpg" width="1400" height="1050" alt="3D-printed fox figurines" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/squirrels.jpg" width="1400" height="1050" alt="3D-printed squirrel figurines" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/hedgehog.jpg" width="1400" height="1050" alt="Hedgehog-shaped planter pot" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/OwlPlanter.jpg" width="1050" height="1400" alt="Owl-shaped planter pot" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/KnightsandDucks.jpg" width="1400" height="999" alt="Knight and duck figurines" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/CowPic.jpg" width="1050" height="1400" alt="3D-printed cow ornament" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/DogCoasters.jpg" width="1400" height="1180" alt="Set of dog-shaped coasters" loading="lazy"></div>
-        <div class="gallery-item"><img src="images/HarryPotterCup.jpg" width="1050" height="1400" alt="Harry Potter-inspired 3D-printed cup" loading="lazy"></div>
-
-      </div>
+      <!-- Gallery is populated automatically from the images/ folder — see the script at the bottom.
+           Add or remove files there and the gallery updates itself, no markup edits needed. -->
+      <div class="gallery" id="gallery"></div>
 
       <p class="gallery-hint">Swipe to browse →</p>
+      <p id="gallery-empty" hidden>New pieces coming soon — check back shortly.</p>
     </div>
   </section>
 
@@ -655,6 +645,62 @@
   nav.querySelectorAll('a').forEach(function(link){
     link.addEventListener('click', function(){ nav.classList.remove('open'); });
   });
+
+  // Gallery — populated from whatever image files currently exist in images/,
+  // via the GitHub API, so adding/removing photos there needs no other edits.
+  (function(){
+    var API_URL = 'https://api.github.com/repos/theDoodleGuy/made-possible/contents/images';
+    var CACHE_KEY = 'mp-gallery-v1';
+    var CACHE_TTL_MS = 60 * 60 * 1000;
+    var IMG_RE = /\.(jpe?g|png|webp|gif)$/i;
+    var gallery = document.getElementById('gallery');
+    var emptyNote = document.getElementById('gallery-empty');
+
+    function humanize(filename){
+      var base = filename.replace(/\.[a-zA-Z0-9]+$/, '');
+      var spaced = base.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/[_-]+/g, ' ').trim();
+      return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+    }
+
+    function render(names){
+      if(!names.length){
+        gallery.innerHTML = '';
+        emptyNote.hidden = false;
+        return;
+      }
+      emptyNote.hidden = true;
+      gallery.innerHTML = names.map(function(name){
+        var alt = humanize(name) + ' — 3D-printed by Made Possible';
+        return '<div class="gallery-item"><img src="images/' + name + '" alt="' + alt + '" loading="lazy" decoding="async"></div>';
+      }).join('');
+    }
+
+    var cachedRaw = localStorage.getItem(CACHE_KEY);
+    var cached = null;
+    if(cachedRaw){
+      try{ cached = JSON.parse(cachedRaw); }catch(e){ cached = null; }
+    }
+    if(cached && Array.isArray(cached.names)){
+      render(cached.names);
+    }
+    if(cached && (Date.now() - cached.time) < CACHE_TTL_MS){
+      return; // cache still fresh, skip the network call
+    }
+
+    fetch(API_URL, { headers: { 'Accept': 'application/vnd.github+json' } })
+      .then(function(r){ if(!r.ok) throw new Error('gallery list failed'); return r.json(); })
+      .then(function(data){
+        var names = data
+          .filter(function(f){ return f.type === 'file' && IMG_RE.test(f.name); })
+          .map(function(f){ return f.name; })
+          .sort(function(a, b){ return a.localeCompare(b); });
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ names: names, time: Date.now() }));
+        render(names);
+      })
+      .catch(function(){
+        if(!cached){ render([]); }
+      });
+  })();
 
   // Scroll reveal
   var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
