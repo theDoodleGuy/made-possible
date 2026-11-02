@@ -469,3 +469,6 @@ footer .foot-tagline{ font-family: var(--font-accent); font-style: italic; color
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity: 1; transform: none; transition: none; }
 }
+.event-place a{ color: var(--charcoal); text-decoration-color: var(--sandstone); text-underline-offset: 2px; }
+.event-place a:hover{ color: var(--forest); }
+.event-info p + p{ margin-top: 0.15em; }
