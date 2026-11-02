@@ -31,7 +31,7 @@ These were deliberate corrections; keep them intact when editing copy:
 
 - [ ] **Public contact email**: the form currently posts to a private Formspree destination that is *not* shown anywhere on the page. Once a proper business email exists, consider adding it back to the "Find us in person" contact block and switching the Formspree destination over.
 - [ ] **Confirm with Leanne**: the materials box invites customers to return end-of-life pieces "back into the loop" — confirm she's happy to honour returns, or cut that sentence.
-- [ ] **Blog (later)**: footer teases "a journal of new pieces and market dates". When added, keep the single-page structure and link out, or convert to a small static site generator.
+- [ ] **Journal**: built (see below) — needs the two Facebook secrets adding before it shows anything.
 
 ## Gallery — fully dynamic, edit by adding/removing files only
 
@@ -66,6 +66,24 @@ are left it shows a "New dates coming soon" note linking to Facebook. Past cards
 Below the dates, **"From the stall"** shows market photos from `assets/stall/` (hand-written alt text in `index.html`).
 These are deliberately *not* in `images/`, which feeds the Designs gallery — stall shots show chalkboard prices, and the
 gallery rule is no prices. Resize to ~1000px before adding.
+
+## Journal — Facebook posts, pulled in automatically
+
+The `#journal` section shows the latest 6 posts from `journal/posts.json`. That file is written by
+`.github/workflows/journal.yml`, which runs `scripts/fetch_journal.py` every 4 hours (or on demand from the
+repo's **Actions → Update journal from Facebook → Run workflow**). It fetches the Page's posts via the Facebook
+Graph API, keeps the latest 24 that have text, saves each photo into `journal/images/` (Facebook's own image
+links expire), and commits only if something changed. Until `posts.json` has at least one post, the section
+and its nav link stay hidden — so the site is safe with the feature switched off.
+
+**Repository secrets needed** (Settings → Secrets and variables → Actions):
+- `FB_PAGE_ID` — the Page's numeric ID (Page → About → Page transparency, or from the token step below)
+- `FB_PAGE_TOKEN` — a long-lived **Page** access token with `pages_read_engagement` and `pages_show_list`.
+  Get one by: creating a Meta developer app (Business type) → Graph API Explorer → generate a User token with
+  those permissions → exchange it for a long-lived User token → call `/me/accounts` with it; the Page token
+  returned there does not expire unless the password changes or the app loses access.
+
+If the workflow starts failing with a token error, generate a fresh Page token and update the secret.
 
 ## Layout notes
 

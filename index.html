@@ -36,6 +36,7 @@
         <li><a href="#products">Designs</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#events">Events</a></li>
+        <li id="nav-journal" hidden><a href="#journal">Journal</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -292,6 +293,22 @@
     </div>
   </section>
 
+  <!-- ================= JOURNAL ================= -->
+  <!-- Filled automatically from journal/posts.json, which a scheduled GitHub Action
+       pulls from the Made Possible Facebook Page (see README, "Journal").
+       The whole section — and its nav link — stays hidden until there are posts. -->
+  <section id="journal" hidden>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">News from the workshop</span>
+        <h2>Journal</h2>
+        <p>New pieces, market days and what's on the printer — straight from our Facebook page.</p>
+      </div>
+      <div class="journal-list" id="journal-list"></div>
+      <p class="journal-more"><a href="https://www.facebook.com/madepossibleprinting" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">More on Facebook</a></p>
+    </div>
+  </section>
+
   <!-- ================= CONTACT ================= -->
   <section id="contact">
     <div class="wrap">
@@ -336,7 +353,7 @@
     <span class="wordmark">MADE POSSIBLE</span>
     <div class="foot-tagline">"Proudly Local"</div>
     <p>Waterside · New Forest · Hampshire</p>
-    <p>A journal of new pieces and market dates is coming soon.</p>
+    <p>Follow along for new pieces and market dates on <a href="https://www.facebook.com/madepossibleprinting" target="_blank" rel="noopener noreferrer">Facebook</a>.</p>
     <div class="foot-social">
       <a href="https://www.facebook.com/madepossibleprinting" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Made Possible on Facebook (opens in a new tab)">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 12.06C22 6.48 17.52 2 11.94 2 6.36 2 1.88 6.48 1.88 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.42V9.91c0-2.39 1.42-3.71 3.6-3.71 1.04 0 2.13.19 2.13.19v2.34h-1.2c-1.18 0-1.55.74-1.55 1.49v1.79h2.64l-.42 2.91h-2.22V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg>

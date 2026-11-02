@@ -93,6 +93,60 @@ nav.querySelectorAll('a').forEach((link) => {
   }
 })();
 
+// Journal — posts pulled from Facebook into journal/posts.json by a scheduled GitHub Action.
+// The section and its nav link stay hidden until at least one post exists.
+(() => {
+  const section = document.getElementById('journal');
+  const list = document.getElementById('journal-list');
+  const navItem = document.getElementById('nav-journal');
+  if (!section || !list) return;
+  const SHOW = 6;
+  const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  fetch('journal/posts.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : []))
+    .then((posts) => {
+      if (!Array.isArray(posts) || !posts.length) return;
+      posts.slice(0, SHOW).forEach((p) => {
+        const card = document.createElement('article');
+        card.className = 'journal-post';
+        if (p.image) {
+          const img = document.createElement('img');
+          img.src = p.image;
+          img.alt = 'Photo from a Made Possible Facebook post';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          card.appendChild(img);
+        }
+        const body = document.createElement('div');
+        body.className = 'journal-body';
+        const date = document.createElement('time');
+        date.className = 'journal-date';
+        date.dateTime = p.date;
+        date.textContent = fmt.format(new Date(p.date));
+        const text = document.createElement('p');
+        text.className = 'journal-text';
+        text.textContent = p.text; // textContent, never innerHTML — post text is plain text
+        body.append(date, text);
+        if (p.link) {
+          const a = document.createElement('a');
+          a.className = 'journal-link';
+          a.href = p.link;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = 'Read on Facebook →';
+          body.appendChild(a);
+        }
+        card.appendChild(body);
+        list.appendChild(card);
+      });
+      section.hidden = false;
+      if (navItem) navItem.hidden = false;
+      section.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+    })
+    .catch(() => {});
+})();
+
 // Scroll reveal
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const revealEls = document.querySelectorAll('.reveal');
