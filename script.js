@@ -75,6 +75,24 @@ nav.querySelectorAll('a').forEach((link) => {
     });
 })();
 
+// Events — hide any event whose date has passed (it stays up all day on the day itself).
+(() => {
+  const list = document.getElementById('events-list');
+  const emptyNote = document.getElementById('events-empty');
+  if (!list) return;
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  let shown = 0;
+  list.querySelectorAll('.event').forEach((ev) => {
+    if (ev.dataset.date < today) ev.remove();
+    else shown += 1;
+  });
+  if (!shown) {
+    list.hidden = true;
+    emptyNote.hidden = false;
+  }
+})();
+
 // Scroll reveal
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const revealEls = document.querySelectorAll('.reveal');

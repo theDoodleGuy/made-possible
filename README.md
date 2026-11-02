@@ -56,6 +56,13 @@ Notes on how this works:
 - [x] **Contact form wired**: submits via `fetch` to a real Formspree endpoint (no page reload), with a honeypot field and real inline success/error messaging.
 - [x] **Favicon + social meta**: `favicon.svg` added; `og:title`, `og:description`, `og:image`, and Twitter card meta added, pointing at the live domain.
 
+## Events — "Find us next"
+
+Market and fair dates live in the `#events` section of `index.html` as a list of `<li class="event" data-date="YYYY-MM-DD">` cards.
+To add one, copy an existing card and change the date, weekday, name, optional place and times — keep them in date order.
+`script.js` removes any card whose date is before today (an event stays visible all day on the day itself), and if none
+are left it shows a "New dates coming soon" note linking to Facebook. Past cards can be deleted at leisure.
+
 ## Layout notes
 
 - Responsive breakpoints: nav collapses ≤760px; "The Loop" is a horizontal track >980px, compact 761–980px, centred vertical timeline ≤760px; gallery is 3-col masonry >900px, 2-col 701–900px, swipe carousel (scroll-snap, square tiles, hidden scrollbar, swipe hint) ≤700px.
