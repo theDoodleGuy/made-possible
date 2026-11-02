@@ -63,6 +63,10 @@ To add one, copy an existing card and change the date, weekday, name, optional p
 `script.js` removes any card whose date is before today (an event stays visible all day on the day itself), and if none
 are left it shows a "New dates coming soon" note linking to Facebook. Past cards can be deleted at leisure.
 
+Below the dates, **"From the stall"** shows market photos from `assets/stall/` (hand-written alt text in `index.html`).
+These are deliberately *not* in `images/`, which feeds the Designs gallery — stall shots show chalkboard prices, and the
+gallery rule is no prices. Resize to ~1000px before adding.
+
 ## Layout notes
 
 - Responsive breakpoints: nav collapses ≤760px; "The Loop" is a horizontal track >980px, compact 761–980px, centred vertical timeline ≤760px; gallery is 3-col masonry >900px, 2-col 701–900px, swipe carousel (scroll-snap, square tiles, hidden scrollbar, swipe hint) ≤700px.

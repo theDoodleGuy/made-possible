@@ -423,6 +423,26 @@ section{ padding: 90px 0; }
 @media (max-width: 900px){ .events-list{ grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px){ .events-list{ grid-template-columns: 1fr; max-width: 420px; } }
 
+/* Stall photos — masonry on wide screens, swipe row on phones (mirrors the Designs gallery) */
+.stall{ margin-top: 70px; text-align: center; }
+.stall h3{ font-size: 1.4rem; margin-bottom: 0.3em; }
+.stall > p{ color: var(--charcoal); margin-bottom: 1.8em; }
+.stall-photos{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.stall-photos figure{ margin: 0; }
+/* Mixed portrait/landscape shots — normalise to one tile shape so the grid sits level */
+.stall-photos img{ display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); }
+@media (max-width: 900px){ .stall-photos{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px){
+  .stall-photos{
+    display: flex; gap: 14px;
+    overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    padding: 4px 2px 8px; scrollbar-width: none;
+  }
+  .stall-photos::-webkit-scrollbar{ display: none; }
+  .stall-photos figure{ flex: 0 0 78%; margin: 0; scroll-snap-align: center; }
+  .stall-photos img{ aspect-ratio: 1 / 1; object-fit: cover; }
+}
+
 /* ---------- Contact ---------- */
 #contact{ background: var(--forest-dark); color: var(--off-white); }
 #contact .section-head h2{ color: var(--off-white); }
