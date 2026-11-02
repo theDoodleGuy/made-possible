@@ -74,7 +74,9 @@ The `#journal` section shows the latest 6 posts from `journal/posts.json`. That 
 repo's **Actions → Update journal from Facebook → Run workflow**). It fetches the Page's posts via the Facebook
 Graph API, keeps the latest 24 that have text, saves each photo into `journal/images/` (Facebook's own image
 links expire), and commits only if something changed. Until `posts.json` has at least one post, the section
-and its nav link stay hidden — so the site is safe with the feature switched off.
+falls back to an **interim Facebook Page feed** (Facebook's own Page Plugin, in an iframe). That feed only loads when a
+visitor clicks "Show our latest posts", so no Facebook cookies are set without their say-so. As soon as the first
+fetch writes posts, the on-brand cards replace it automatically — no code change needed.
 
 **Repository secrets needed** (Settings → Secrets and variables → Actions):
 - `FB_PAGE_ID` — the Page's numeric ID (Page → About → Page transparency, or from the token step below)

@@ -103,10 +103,44 @@ nav.querySelectorAll('a').forEach((link) => {
   const SHOW = 6;
   const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
+  const FB_PAGE = 'https://www.facebook.com/madepossibleprinting';
+  const showSection = () => {
+    section.hidden = false;
+    if (navItem) navItem.hidden = false;
+    section.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+  };
+
+  // Interim fallback while posts.json is empty: Facebook's own Page feed, loaded on a click.
+  function showFacebookFeed() {
+    const feed = document.getElementById('fb-feed');
+    const btn = document.getElementById('fb-load');
+    const more = document.getElementById('journal-more');
+    if (!feed || !btn) return;
+    feed.hidden = false;
+    if (more) more.hidden = true; // the facade already points to Facebook
+    btn.addEventListener('click', () => {
+      const width = Math.max(280, Math.min(500, Math.floor(feed.clientWidth)));
+      const params = new URLSearchParams({
+        href: FB_PAGE, tabs: 'timeline', width: String(width), height: '720',
+        small_header: 'true', adapt_container_width: 'true', hide_cover: 'false', show_facepile: 'false',
+      });
+      const frame = document.createElement('iframe');
+      frame.src = `https://www.facebook.com/plugins/page.php?${params}`;
+      frame.width = String(width);
+      frame.height = '720';
+      frame.title = 'Made Possible on Facebook';
+      frame.loading = 'lazy';
+      frame.allow = 'encrypted-media; clipboard-write; web-share';
+      feed.replaceChildren(frame);
+      if (more) more.hidden = false;
+    });
+    showSection();
+  }
+
   fetch('journal/posts.json', { cache: 'no-cache' })
     .then((r) => (r.ok ? r.json() : []))
     .then((posts) => {
-      if (!Array.isArray(posts) || !posts.length) return;
+      if (!Array.isArray(posts) || !posts.length) { showFacebookFeed(); return; }
       posts.slice(0, SHOW).forEach((p) => {
         const card = document.createElement('article');
         card.className = 'journal-post';
@@ -140,11 +174,9 @@ nav.querySelectorAll('a').forEach((link) => {
         card.appendChild(body);
         list.appendChild(card);
       });
-      section.hidden = false;
-      if (navItem) navItem.hidden = false;
-      section.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+      showSection();
     })
-    .catch(() => {});
+    .catch(showFacebookFeed);
 })();
 
 // Scroll reveal

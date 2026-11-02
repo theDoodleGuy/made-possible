@@ -465,6 +465,16 @@ section{ padding: 90px 0; }
 @media (max-width: 900px){ .journal-list{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px){ .journal-list{ grid-template-columns: 1fr; max-width: 460px; margin: 0 auto; } }
 
+.fb-feed{ display: flex; justify-content: center; }
+.fb-feed[hidden]{ display: none; }
+.fb-facade{
+  width: 100%; max-width: 500px; box-sizing: border-box; text-align: center;
+  background: var(--white); border-radius: var(--radius); padding: 36px 28px;
+  box-shadow: 0 1px 3px rgba(44,44,44,0.06);
+}
+.fb-facade .btn{ margin: 0.4em 0 1em; }
+.fb-note{ font-size: 0.82rem; color: #5f5f5f; margin: 0; }
+.fb-feed iframe{ display: block; border: 0; border-radius: var(--radius); background: var(--white); max-width: 100%; }
 footer a{ color: var(--sandstone); }
 
 /* ---------- Contact ---------- */

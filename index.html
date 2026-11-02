@@ -305,7 +305,17 @@
         <p>New pieces, market days and what's on the printer — straight from our Facebook page.</p>
       </div>
       <div class="journal-list" id="journal-list"></div>
-      <p class="journal-more"><a href="https://www.facebook.com/madepossibleprinting" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">More on Facebook</a></p>
+
+      <!-- Interim: Facebook's Page feed, used only while journal/posts.json is empty.
+           Loads on a click so no Facebook cookies are set until a visitor chooses to see it. -->
+      <div class="fb-feed" id="fb-feed" hidden>
+        <div class="fb-facade" id="fb-facade">
+          <p>Our latest news and new pieces are posted on Facebook.</p>
+          <button type="button" class="btn btn-primary" id="fb-load">Show our latest posts</button>
+          <p class="fb-note">This loads content from Facebook, which may set cookies.</p>
+        </div>
+      </div>
+      <p class="journal-more" id="journal-more"><a href="https://www.facebook.com/madepossibleprinting" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">More on Facebook</a></p>
     </div>
   </section>
 
